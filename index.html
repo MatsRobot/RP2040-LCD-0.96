@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="YOUR_CODE_HERE" />
+    
+    <title>RP2040-LCD-0.96 MicroPython Guide | MatsRobot</title>
+    <meta name="description" content="A guide to getting the Waveshare RP2040-LCD-0.96 working with MicroPython, including custom modules and UF2 firmware setup.">
+    
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; color: #24292e; max-width: 800px; margin: 0 auto; padding: 2rem; }
+        h1 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }
+        h2 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 1.5em; }
+        .btn { background-color: #2ea44f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 20px; }
+        code { background-color: #f6f8fa; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; }
+        img { max-width: 100%; height: auto; border-radius: 6px; margin: 1rem 0; border: 1px solid #ddd; }
+        .note { background-color: #fffbdd; padding: 1rem; border-left: 4px solid #d4a017; margin: 1rem 0; }
+        ul { padding-left: 1.5rem; }
+    </style>
+</head>
+<body>
+
+    <h1>RP2040-LCD-0.96 Implementation</h1>
+    
+    <p>This repository provides example code and a modularised approach for using the <strong>RP2040-LCD-0.96</strong>. Finding clear documentation for this specific module can be difficult, so this project documents a reliable workflow.</p>
+
+    <div class="note">
+        <strong>The Challenge:</strong> These modules often ship with CircuitPython, which can sometimes lock the virtual drive. 
+        <br><strong>The Fix:</strong> I switched the processor to <code>MicroPython</code> using the specific Waveshare UF2 firmware to maintain compatibility with my other Pico projects.
+    </div>
+
+    <img src="https://github.com/user-attachments/assets/c3657bc8-787d-4498-a4cc-5451ca208107" alt="RP2040-LCD-0.96 Display Running">
+
+    <h2>Working Examples Included</h2>
+    <p>I have verified and modularised several display scripts to work over the SPI interface:</p>
+    <ul>
+        <li><code>pico-LCD-0.96.py</code> - Core display driver.</li>
+        <li><code>WS_0-96_160x80_MIN.py</code> - Minimal footprint setup.</li>
+        <li><code>graphicstest.py</code> - Full visual test (requires <code>sysfont.py</code>).</li>
+    </ul>
+
+    <p>Rather than relying on monolithic scripts, I have split the functions into a separate module, providing a clean base for any future RP2040 projects.</p>
+
+    <a href="https://github.com/MatsRobot/RP2040-LCD-0.96" class="btn">View Source Code on GitHub</a>
+
+    <hr>
+    <footer>
+        <p><small>&copy; MatsRobot - Documenting Robotics & IoT Solutions</small></p>
+        <p><a href="https://matsrobot.github.io/" style="text-decoration: none; color: #0366d6;">← Back to Home</a></p>
+    </footer>
+
+</body>
+</html>
+
