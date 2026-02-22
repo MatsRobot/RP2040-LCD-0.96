@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://matsrobot.github.io/Favicon-192.png" sizes="192x192">
+    
+    <title>RP2040-LCD-0.96: Hardware SPI & ST7735 Driver | MatsRobot</title>
+    <meta name="description" content="A professional MicroPython development framework for the Waveshare RP2040-LCD-0.96. Features modular ST7735 drivers, high-speed SPI optimization, and BOOTSEL recovery logic.">
+    
+    <link rel="canonical" href="https://github.com/MatsRobot/RP2040-LCD-0.96" />
+
+    <style>
+        :root {
+            --gh-green: #238636; --gh-green-hover: #2ea44f;
+            --gh-dark: #24292e; --gh-blue: #0366d6;
+            --gh-border: #eaecef; --gh-bg-gray: #f6f8fa;
+            --note-bg: #fffbdd; --note-border: #d4a017;
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; color: var(--gh-dark); max-width: 950px; margin: 0 auto; padding: 2rem; }
+        .hero-section { display: flex; gap: 2.5rem; margin-bottom: 2rem; align-items: center; }
+        .hero-text { flex: 3; }
+        .image-sidebar { flex: 2; border: 1px solid var(--gh-border); border-radius: 8px; padding: 15px; text-align: center; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .image-sidebar img { max-width: 100%; height: auto; border-radius: 4px; }
+        .caption { font-size: 0.85rem; color: #586069; margin-top: 10px; display: block; }
+        h1 { font-size: 1.8rem; margin-top: 0; }
+        h2 { color: var(--gh-blue); border-bottom: 1px solid var(--gh-border); padding-bottom: 0.3em; margin-top: 2rem; }
+        .note { background-color: var(--note-bg); padding: 1.25rem; border-left: 5px solid var(--note-border); margin: 1.5rem 0; border-radius: 4px; }
+        .btn-download { background-color: var(--gh-green); color: white; padding: 12px 28px; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; gap: 18px; font-weight: 600; transition: background 0.2s; border: 1px solid rgba(27, 31, 35, 0.15); }
+        .btn-download:hover { background-color: var(--gh-green-hover); }
+        .btn-text-container { display: flex; flex-direction: column; line-height: 1.1; }
+        .btn-main { font-size: 1.35rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .btn-sub-lines { font-size: 0.75rem; font-weight: 400; opacity: 0.9; }
+        .table-container { overflow-x: auto; margin: 1rem 0; }
+        .tech-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        .tech-table th, .tech-table td { padding: 12px; border: 1px solid var(--gh-border); }
+        .tech-table th { background-color: var(--gh-bg-gray); text-align: left; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem; }
+        footer { margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--gh-border); text-align: center; color: #6a737d; font-size: 0.9rem; }
+        @media (max-width: 768px) { .hero-section, .grid { flex-direction: column; } .image-sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <div class="hero-text">
+            <h1>📟 RP2040-LCD-0.96: Hardware SPI Implementation</h1>
+            <p>A high-performance library structure for the Waveshare RP2040-LCD-0.96 board. This framework migrates the board from limited factory scripts to a modular <strong>ST7735 controller</strong> driver optimized for <strong>Hardware SPI</strong> throughput on MicroPython.</p>
+            
+            <div class="note">
+                <strong>Firmware Recovery:</strong> This project provides a specific <code>.uf2</code> binary and BOOTSEL workflow to bypass the CircuitPython "auto-lock" demo, restoring full REPL and filesystem access.
+            </div>
+
+            <a href="https://github.com/MatsRobot/RP2040-LCD-0.96" class="btn-download">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                <div class="btn-text-container">
+                    <span class="btn-main">Get Library Files</span>
+                    <div class="btn-sub-lines"><span>Drivers, Firmware & ST7735 Examples</span></div>
+                </div>
+            </a>
+        </div>
+
+        <div class="image-sidebar">
+            <img src="https://github.com/user-attachments/assets/c3657bc8-787d-4498-a4cc-5451ca208107" alt="Waveshare RP2040-LCD-0.96 IPS Display Color Test">
+            <span class="caption">RP2040-LCD 160x80 IPS SPI Protocol Test</span>
+        </div>
+    </div>
+
+    <h2>Technical Architecture</h2>
+    <p>The library focuses on decoupling the <strong>Physical Layer</strong> from the <strong>Application Layer</strong> to maximize execution speed:</p>
+    <ul>
+        <li><strong>ST7735 Driver Isolation:</strong> Command registers for display initialization (MADCTL, COLMOD, etc.) are handled in a dedicated module.</li>
+        <li><strong>SRAM Buffer Management:</strong> Uses a frame-buffer approach within MicroPython to allow for high-speed primitive rendering before committing to the SPI bus.</li>
+        <li><strong>Hardware SPI Master:</strong> Configured for the RP2040's dedicated SPI peripherals to ensure stable clock signals for the 65K color IPS panel.</li>
+    </ul>
+
+    <h2>Technical Specifications</h2>
+    <div class="table-container">
+        <table class="tech-table">
+            <thead>
+                <tr><th>Subsystem</th><th>Specification & Logic</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Core Logic</strong></td><td>Dual-core ARM Cortex M0+ @ 133MHz</td></tr>
+                <tr><td><strong>LCD Interface</strong></td><td>160&times;80 IPS (ST7735 Controller)</td></tr>
+                <tr><td><strong>Bus Protocol</strong></td><td>Hardware SPI (SCK/MOSI/CS/DC/RST)</td></tr>
+                <tr><td><strong>Memory Efficiency</strong></td><td>Modular imports to minimize RAM footprint</td></tr>
+                <tr><td><strong>Firmware Build</strong></td><td>Custom MicroPython UF2 (v.20210121)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="grid">
+        <div>
+            <h3>Modular Register Control</h3>
+            <p>By isolating the ST7735 instruction set, this library allows developers to modify display orientation and color inversion at the driver level without disrupting the main telemetry logic.</p>
+        </div>
+        <div>
+            <h3>IPS Panel Verification</h3>
+            <p>The included <code>graphicstest.py</code> performs an exhaustive sweep of the RGB565 color space and geometric rendering, verifying SPI bus integrity and pixel-clock timing.</p>
+        </div>
+    </div>
+
+    <h2>Engineering Challenge: The BOOTSEL Wipe</h2>
+    <p>A primary hurdle with this Waveshare module is the factory "demo loop" that prevents serial interruption. This framework implements a low-level <strong>Flash Wipe</strong> via BOOTSEL, allowing the transition to a professional, REPL-enabled development environment via Thonny or VS Code.</p>
+
+    <footer>
+        <p>© 2026 MatsRobot - Open Source Robotics Initiative</p>
+        <p><small>Copyright (c) 2026 | Licensed under the <a href="https://github.com/MatsRobot/matsrobot.github.io/blob/main/LICENSE" style="color: #6a737d;">MIT License</a></small></p>
+    </footer>
+</body>
+</html>
